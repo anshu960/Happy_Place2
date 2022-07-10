@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Happy_Place</string>
+    <string name="no_happy_places_found_yet">No Happy Places Found yet</string>
+    <string name="guest">guest</string>
+    <string name="no_event_found_yet">no event</string>
+    <string name="note_text_no_happy_places_found_yet">No Happy Places Found Yet. Kindly add one.</string>
+    <string name="image_content_description">image</string>
+</resources>
