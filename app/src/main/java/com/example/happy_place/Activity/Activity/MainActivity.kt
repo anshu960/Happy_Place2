@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         }
         Add_btn.setOnClickListener {
             val intent = Intent(this, ContentActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, ADD_PLACE_ACTIVITY_REQUEST_CODE)
         }
         getHappyPlacesListFromLocalDB()
     }
@@ -36,6 +37,15 @@ class MainActivity : AppCompatActivity() {
 
         val placesAdapter = HappyPlacesAdapter(this, happyPlaceList)
         rv_happy_places_list.adapter = placesAdapter
+
+        placesAdapter.setOnClickListener(object : HappyPlacesAdapter.OnclickListener{
+            override fun onClick(position: Int, model: HappyPlaceModel) {
+                val intent = Intent(this@MainActivity,
+                    HappyPlaceDetailActivity::class.java)
+                intent.putExtra(EXTRA_PLACE_DETAILS, model)
+                startActivity(intent)
+            }
+        })
 
     }
 
@@ -52,6 +62,13 @@ class MainActivity : AppCompatActivity() {
         }
         }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == ADD_PLACE_ACTIVITY_REQUEST_CODE){
+            if (resultCode == Activity.RESULT_OK){
+                getHappyPlacesListFromLocalDB()
+            }else{
+                Log.e("Activity", "Cancelled or Back pressed")
+            }
+        }
         if (resultCode == Activity.RESULT_OK){
             val result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data)
             if (result != null){
@@ -65,6 +82,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    companion object{
+        var ADD_PLACE_ACTIVITY_REQUEST_CODE = 1
+        var EXTRA_PLACE_DETAILS = "extra_place_details"
     }
     }
 
